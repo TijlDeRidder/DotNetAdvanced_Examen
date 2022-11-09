@@ -28,6 +28,11 @@ namespace DotNetAdvanced_Examen
         {
             return this.Name;
         }
+
+        public int GetStationId()
+        {
+            return Id;
+        }
         public override bool Equals(object? obj)
         {
         if(obj == null) { return false; }
@@ -35,6 +40,18 @@ namespace DotNetAdvanced_Examen
         return (this.Name ==((Station)obj).Name);
         }
 
+        public static Station findStationByName(string naam)
+        {
+            Station station = null;
+            foreach (var item in Station.LijstStation)
+            {
+                if (item.Name == naam)
+                {
+                    station = item;
+                }
+            }
+            return station;
+        }
     }
 
 }

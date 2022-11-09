@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace DotNetAdvanced_Examen
 {
-    internal class Lift
+    public class Lift
     {
-        public static List<Lift> LijstLift = new List<Lift>();
+        public static List<Lift> LijstSLiften = new List<Lift>();
         private int Id;
         private string Name { get; set; }
         public int StationId { get; set; }
-        private byte Is_Working;
+        private byte Is_Working { get; set; }
 
         public Lift(int id, string name, int stationId, byte is_Working)
         {
@@ -21,23 +21,44 @@ namespace DotNetAdvanced_Examen
             StationId = stationId;
             Is_Working = is_Working;
         }
-
+        public byte GetIsWorking()
+        {
+            return Is_Working;
+        }
         public override string? ToString()
         {
             return this.Name;
         }
-
-        public List<Lift> findLiftsByStationId(Station station)
+        public override bool Equals(object? obj)
+        {
+            if (obj == null) { return false; }
+            if (!(obj is Lift)) { return false; }
+            return (this.Name == ((Lift)obj).Name);
+        }
+        public static List<Lift> FindLiftsByStationId(Station station)
         {
             List<Lift> lifts = new List<Lift>();
-            foreach (var lift in Lift.LijstLift)
+            foreach (Lift lift in Lift.LijstSLiften)
             {
-                if (lift.StationId == Station.Id)
+                if (lift.StationId == station.GetStationId())
                 {
                     lifts.Add(lift);
                 }
             }
             return lifts;
         }
+        public static Lift findLiftByName(string naam)
+        {
+            Lift lift = null;
+            foreach (var item in Lift.LijstSLiften)
+            {
+                if (item.Name == naam)
+                {
+                    lift = item;
+                }
+            }
+            return lift;
+        }
     }
 }
+

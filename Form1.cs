@@ -32,13 +32,7 @@ namespace DotNetAdvanced_Examen
                 {
                     while (reader2.Read())
                     {
-                        Lift.LijstLift.Add(new Lift(reader2.GetInt32(0), reader2.GetString(1), reader2.GetInt32(2), reader2.GetByte(3)));
-                        string test = "";
-                        foreach (var item in Lift.LijstLift)
-                        {
-                            test += item.ToString();
-                        }
-                        MessageBox.Show(test);
+                        Lift.LijstSLiften.Add(new Lift(reader2.GetInt32(0), reader2.GetString(1), reader2.GetInt32(2), reader2.GetByte(3)));
                     }
                 }
                 foreach (var item in Station.LijstStation)
@@ -51,26 +45,47 @@ namespace DotNetAdvanced_Examen
 
         private void cb_metrostation_SelectedIndexChanged(object sender, EventArgs e)
         {
+            lb_liften.Items.Clear();
             string name = cb_metrostation.Text;
-            Station huidig = findStationByName(name);
-                        
-        }
-
-        public Station findStationByName(string naam)
-        {
-            Station station = null;
-            foreach (var item in Station.LijstStation)
+            Station huidig = Station.findStationByName(name);
+            List<Lift> huidigeLiften = new List<Lift>();
+            huidigeLiften = Lift.FindLiftsByStationId(huidig);
+            if(huidigeLiften.Count != 0)
             {
-                if (item.Equals(naam))
+                foreach (Lift lift in huidigeLiften)
                 {
-                    station = item;
+                    lb_liften.Items.Add(lift.ToString());
                 }
             }
-            return station;
+            else
+            {
+                lb_liften.Items.Add("Dit station is niet ");
+                lb_liften.Items.Add("toegankelijk");
+            }
+            
+        }
+        private void lb_liften_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            lb_status.Visible = true;
+            lb_liftnaam.Visible = true;
+            Lift huidig = Lift.findLiftByName(lb_liften.Text);
+            tb_liftnaam.Text = huidig.ToString();
+            tb_liftnaam.Visible = true;
+            if(huidig.GetIsWorking() == 1)
+            {
+                tb_status.Text = "Werkt";
+
+            }
+            else if(huidig.GetIsWorking() == 0)
+            {
+                tb_status.Text = "Werkt Niet";
+            }
+            tb_status.Visible = true;
         }
 
+        private void b_defect_Click(object sender, EventArgs e)
+        {
 
-
-
+        }
     }
 }
