@@ -109,7 +109,7 @@
             // 
             this.b_defect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.b_defect.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.b_defect.Location = new System.Drawing.Point(232, 190);
+            this.b_defect.Location = new System.Drawing.Point(232, 179);
             this.b_defect.Name = "b_defect";
             this.b_defect.Size = new System.Drawing.Size(100, 23);
             this.b_defect.TabIndex = 7;

@@ -3,7 +3,7 @@ using System.Reflection.Metadata;
 using System;
 using System.Data.SqlClient;
 using System.Data;
-
+using System.Linq;
 namespace DotNetAdvanced_Examen
 {
     public partial class LiftMeUp : Form
@@ -23,7 +23,7 @@ namespace DotNetAdvanced_Examen
             {
                 while (reader.Read())
                 {
-                    Station.LijstStation.Add(new Station(reader.GetInt32(0), reader.GetString(1), reader.GetByte(2), reader.GetByte(3)));
+                    Station.LijstStation.Add(new Station(reader.GetString(1), reader.GetByte(2), reader.GetByte(3)));
                 }
                 connection.Close();
                 SqlCommand command2 = new SqlCommand("SELECT Id, Naam, Station_id, Is_Working FROM Liften", connection);
@@ -32,7 +32,7 @@ namespace DotNetAdvanced_Examen
                 {
                     while (reader2.Read())
                     {
-                        Lift.LijstSLiften.Add(new Lift(reader2.GetInt32(0), reader2.GetString(1), reader2.GetInt32(2), reader2.GetByte(3)));
+                        Lift.LijstSLiften.Add(new Lift(reader2.GetString(1), reader2.GetInt32(2), reader2.GetByte(3)));
                     }
                 }
                 foreach (var item in Station.LijstStation)
@@ -61,6 +61,10 @@ namespace DotNetAdvanced_Examen
             {
                 lb_liften.Items.Add("Dit station is niet ");
                 lb_liften.Items.Add("toegankelijk");
+                lb_status.Visible = false;
+                lb_liftnaam.Visible = false;
+                tb_liftnaam.Visible=false;
+                tb_status.Visible = false;
             }
             
         }
@@ -74,18 +78,24 @@ namespace DotNetAdvanced_Examen
             if(huidig.GetIsWorking() == 1)
             {
                 tb_status.Text = "Werkt";
+                b_defect.Visible = true;
+
 
             }
             else if(huidig.GetIsWorking() == 0)
             {
                 tb_status.Text = "Werkt Niet";
+                b_defect.Visible = false;
             }
             tb_status.Visible = true;
         }
 
         private void b_defect_Click(object sender, EventArgs e)
         {
-
+            Lift huidig = Lift.findLiftByName(lb_liften.Text);
+            Form defect = new LiftDefectMDI(huidig);
+            defect.Text = huidig.ToString();
+            defect.ShowDialog();
         }
     }
 }
