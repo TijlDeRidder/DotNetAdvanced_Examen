@@ -11,14 +11,14 @@ namespace DotNetAdvanced_Examen
     public class Station
     {
         public static List<Station> LijstStation = new List<Station>();
-        private int Id;
+        private int Id { get; set; }
         private string Name { get; set; }
         private byte Is_Accecible;
         private byte Has_Elevator;
 
-        public Station(string name, byte is_Accecible, byte has_Elevator)
+        public Station(int id, string name, byte is_Accecible, byte has_Elevator)
         {
-            Id = LijstStation.Count + 1;
+            Id = id;
             Name = name;
             Is_Accecible = is_Accecible;
             Has_Elevator = has_Elevator;

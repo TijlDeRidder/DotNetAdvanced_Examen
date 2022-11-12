@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,9 +14,9 @@ namespace DotNetAdvanced_Examen
         public int StationId { get; set; }
         private byte Is_Working { get; set; }
 
-        public Lift(string name, int stationId, byte is_Working)
+        public Lift(int id, string name, int stationId, byte is_Working)
         {
-            Id = LijstSLiften.Count + 1;
+            Id = id;
             Name = name;
             StationId = stationId;
             Is_Working = is_Working;
@@ -26,9 +25,10 @@ namespace DotNetAdvanced_Examen
         {
             return Is_Working;
         }
-        public void SetIsWorking(byte isWorking)
+
+        public int GetId()
         {
-            Is_Working = isWorking;
+            return Id;
         }
         public override string? ToString()
         {

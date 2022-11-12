@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -24,14 +25,20 @@ namespace DotNetAdvanced_Examen
         {
             DateTime date = dtp_defect_date.Value;
             String uitleg = rtb_uitleg.Text;
-            Melding huidigeMelding = new Melding(lift,uitleg,date);
+            Melding huidigeMelding = new Melding(lift, uitleg, date);
             Melding.Meldingen.Add(huidigeMelding);
-
+            foreach (var item in Melding.Meldingen)
+            {
+                MessageBox.Show(item.ToString());
+                huidigeMelding.addMeldingToDB();
+                this.Close();
+            }
         }
 
         private void b_cancel_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
     }
 }
