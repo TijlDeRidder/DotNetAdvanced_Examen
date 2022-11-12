@@ -27,10 +27,11 @@ namespace DotNetAdvanced_Examen
             String uitleg = rtb_uitleg.Text;
             Melding huidigeMelding = new Melding(lift, uitleg, date);
             Melding.Meldingen.Add(huidigeMelding);
+            huidigeMelding.addMeldingToDB();
             foreach (var item in Melding.Meldingen)
-            {
-                MessageBox.Show(item.ToString());
-                huidigeMelding.addMeldingToDB();
+            { 
+                huidigeMelding.lift.SetIsWorking(0);
+                huidigeMelding.lift.updateLiftDB();
                 this.Close();
             }
         }

@@ -29,7 +29,7 @@ namespace DotNetAdvanced_Examen
             Station huidig = Station.findStationByName(name);
             List<Lift> huidigeLiften = new List<Lift>();
             huidigeLiften = Lift.FindLiftsByStationId(huidig);
-            if(huidigeLiften.Count != 0)
+            if (huidigeLiften.Count != 0)
             {
                 foreach (Lift lift in huidigeLiften)
                 {
@@ -42,32 +42,36 @@ namespace DotNetAdvanced_Examen
                 lb_liften.Items.Add("toegankelijk");
                 lb_status.Visible = false;
                 lb_liftnaam.Visible = false;
-                tb_liftnaam.Visible=false;
+                tb_liftnaam.Visible = false;
                 tb_status.Visible = false;
             }
-            
+
         }
         private void lb_liften_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lb_status.Visible = true;
-            lb_liftnaam.Visible = true;
             Lift huidig = Lift.findLiftByName(lb_liften.Text);
+            if (huidig != null)
+            {
+                            lb_status.Visible = true;
+            lb_liftnaam.Visible = true;
             tb_liftnaam.Text = huidig.ToString();
             tb_liftnaam.Visible = true;
-            if(huidig.GetIsWorking() == 1)
+            if (huidig.GetIsWorking() == 1)
             {
                 tb_status.Text = "Werkt";
                 b_defect.Visible = true;
 
 
             }
-            else if(huidig.GetIsWorking() == 0)
+            else if (huidig.GetIsWorking() == 0)
             {
                 tb_status.Text = "Werkt Niet";
                 b_defect.Visible = false;
             }
             tb_status.Visible = true;
-        }
+            }
+            }
+
 
         private void b_defect_Click(object sender, EventArgs e)
         {
@@ -89,15 +93,26 @@ namespace DotNetAdvanced_Examen
                     Station.LijstStation.Add(new Station(reader.GetInt32(0), reader.GetString(1), reader.GetByte(2), reader.GetByte(3)));
                 }
                 connection.Close();
-                SqlCommand command2 = new SqlCommand("SELECT Id, Naam, Station_id, Is_Working FROM Liften", connection);
-                connection.Open();
-                using (SqlDataReader reader2 = command2.ExecuteReader())
+            }
+            SqlCommand command2 = new SqlCommand("SELECT Id, Naam, Station_id, Is_Working FROM Liften", connection);
+            connection.Open();
+            using (SqlDataReader reader2 = command2.ExecuteReader())
+            {
+                while (reader2.Read())
                 {
-                    while (reader2.Read())
-                    {
-                        Lift.LijstSLiften.Add(new Lift(reader2.GetInt32(0), reader2.GetString(1), reader2.GetInt32(2), reader2.GetByte(3)));
-                    }
+                    Lift.LijstSLiften.Add(new Lift(reader2.GetInt32(0), reader2.GetString(1), reader2.GetInt32(2), reader2.GetByte(3)));
                 }
+                connection.Close();
+            }
+            SqlCommand command3 = new SqlCommand("SELECT Id, liftId, Station_id, Date, Uitleg FROM Meldingen", connection);
+            connection.Open();
+            using (SqlDataReader reader3 = command3.ExecuteReader())
+            {
+                while (reader3.Read())
+                {
+                    Melding.Meldingen.Add(new Melding(reader3.GetInt32(0), reader3.GetInt32(1), reader3.GetInt32(2), reader3.GetDateTime(3), reader3.GetString(4)));
+                }
+                connection.Close();
             }
         }
     }

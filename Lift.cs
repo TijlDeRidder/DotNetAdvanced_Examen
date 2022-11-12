@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,10 @@ namespace DotNetAdvanced_Examen
         public byte GetIsWorking()
         {
             return Is_Working;
+        }
+        public void SetIsWorking(byte isWorking)
+        {
+            this.Is_Working = isWorking;
         }
 
         public int GetId()
@@ -63,6 +68,32 @@ namespace DotNetAdvanced_Examen
                 }
             }
             return lift;
+        }
+        public static Lift findLiftById(int id)
+        {
+            Lift lift = null;
+            foreach(var item in Lift.LijstSLiften)
+            {
+                if(item.Id == id)
+                {
+                    lift = item;
+                }
+            }
+            return lift;
+        }
+
+        public void updateLiftDB()
+        {
+            string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\tijl-\\OneDrive\\Documenten\\Stations.mdf;Integrated Security=True;Connect Timeout=30";
+            SqlConnection connection = new SqlConnection(dbConnection);
+            SqlCommand command = new SqlCommand("UPDATE LIFTEN SET Is_Working = (@working) WHERE Id = (@Id)", connection);
+            connection.Open();
+            using (command)
+            {
+                command.Parameters.AddWithValue("@working", this.GetIsWorking());
+                command.Parameters.AddWithValue("@Id", this.GetId());
+                command.ExecuteNonQuery();
+            }
         }
     }
 }

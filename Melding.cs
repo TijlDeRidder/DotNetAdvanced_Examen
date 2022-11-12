@@ -22,6 +22,13 @@ namespace DotNetAdvanced_Examen
             this.uitleg = uitleg;
             this.date = date;
         }
+        public Melding(int id, int liftId, int stationId, DateTime date, String uitleg)
+        {
+            this.id = Meldingen.Count + 1;
+            this.lift = Lift.findLiftById(liftId);
+            this.uitleg = uitleg;
+            this.date = date;
+        }
 
         public override string? ToString()
         {
@@ -30,20 +37,17 @@ namespace DotNetAdvanced_Examen
 
         public void addMeldingToDB()
         {
-            MessageBox.Show(this.id.ToString());
             string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\tijl-\\OneDrive\\Documenten\\Stations.mdf;Integrated Security=True;Connect Timeout=30";
             SqlConnection connection = new SqlConnection(dbConnection);
             SqlCommand command = new SqlCommand("INSERT INTO MELDINGEN(Id,LiftId,Station_Id,Date,Uitleg) VALUES(@Id,@LiftId,@StationId,@Date,@Uitleg)", connection);
             connection.Open();
-            using (command)
-            {
                 command.Parameters.AddWithValue("@Id", this.id);
                 command.Parameters.AddWithValue("@LiftId", this.lift.GetId());
                 command.Parameters.AddWithValue("@StationId", this.lift.StationId);
                 command.Parameters.AddWithValue("@Date", this.date);
                 command.Parameters.AddWithValue("@Uitleg", this.uitleg);
                 command.ExecuteNonQuery();
-            }
+            connection.Close();
         }
     }
 }
