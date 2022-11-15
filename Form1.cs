@@ -16,10 +16,8 @@ namespace DotNetAdvanced_Examen
         private void LiftMeUp_Load(object sender, EventArgs e)
         {
             getData();
-            foreach (var item in Station.LijstStation)
-            {
-                cb_metrostation.Items.Add(item.ToString());
-            }
+            Station.LijstStation.ForEach(station => cb_metrostation.Items.Add(station.ToString()));
+            fill_tab_meldingen(Melding.MeldingCount);
         }
 
         private void cb_metrostation_SelectedIndexChanged(object sender, EventArgs e)
@@ -31,12 +29,9 @@ namespace DotNetAdvanced_Examen
             huidigeLiften = Lift.FindLiftsByStationId(huidig);
             if (huidigeLiften.Count != 0)
             {
-                foreach (Lift lift in huidigeLiften)
-                {
-                    lb_liften.Items.Add(lift.ToString());
-                }
+                huidigeLiften.ForEach(lift => lb_liften.Items.Add(lift.ToString()));
             }
-            else
+            else if(huidig.GetIsAccecible() == 0)
             {
                 lb_liften.Items.Add("Dit station is niet ");
                 lb_liften.Items.Add("toegankelijk");
@@ -45,7 +40,28 @@ namespace DotNetAdvanced_Examen
                 tb_liftnaam.Visible = false;
                 tb_status.Visible = false;
             }
+            else if(huidig.GetIsAccecible() == 1 && huidig.GetHasElevator() == 0)
+            {
+                lb_liften.Items.Add("Dit station is");
+                lb_liften.Items.Add("toegankelijk zonder");
+                lb_liften.Items.Add("lift");
+                lb_status.Visible = false;
+                lb_liftnaam.Visible = false;
+                tb_liftnaam.Visible = false;
+                tb_status.Visible = false;
+            }
 
+        }
+        private void fill_tab_meldingen(int index)
+        {
+            if(Melding.Meldingen.Count > 0)
+            {
+                Melding huidig = Melding.Meldingen[index];
+                tb_showDatum.Text = huidig.GetDateTime().ToString();
+                tb_showStation.Text = Station.findStationById(huidig.lift.StationId).ToString();
+                tb_showLift.Text = huidig.lift.ToString();
+                rtb_showUitleg.Text = huidig.GetUitleg();
+            }
         }
         private void lb_liften_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -80,6 +96,7 @@ namespace DotNetAdvanced_Examen
             defect.Text = huidig.ToString();
             defect.ShowDialog();
         }
+
         private void getData()
         {
             string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\tijl-\\OneDrive\\Documenten\\Stations.mdf;Integrated Security=True;Connect Timeout=30";
@@ -114,6 +131,48 @@ namespace DotNetAdvanced_Examen
                 }
                 connection.Close();
             }
+        }
+
+        private void b_volgende_Click(object sender, EventArgs e)
+        {
+            if(Melding.MeldingCount + 1 < Melding.Meldingen.Count)
+            {
+                Melding.MeldingCount++;
+            }
+            else
+            {
+                Melding.MeldingCount = 0;
+            }
+            
+            fill_tab_meldingen(Melding.MeldingCount);
+        }
+
+        private void b_vorige_Click(object sender, EventArgs e)
+        {
+            if (Melding.MeldingCount != 0)
+            {
+                Melding.MeldingCount--;
+            }
+            else
+            {
+            
+                Melding.MeldingCount = Melding.Meldingen.Count;
+                Melding.MeldingCount--;
+            }
+
+            fill_tab_meldingen(Melding.MeldingCount);
+        }
+
+        private void b_fixed_Click(object sender, EventArgs e)
+        {
+            Melding huidig  = Melding.Meldingen[Melding.MeldingCount];
+            huidig.lift.SetIsWorking(1);
+            huidig.lift.updateLiftDB();
+            huidig.updateMeldingDB();
+            Melding.Meldingen.Remove(huidig);
+            Melding.MeldingCount = 0;
+            fill_tab_meldingen(Melding.MeldingCount);
+
         }
     }
 }

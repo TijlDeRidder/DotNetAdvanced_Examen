@@ -33,6 +33,14 @@ namespace DotNetAdvanced_Examen
         {
             return Id;
         }
+        public byte GetIsAccecible()
+        {
+            return Is_Accecible;
+        }
+        public byte GetHasElevator()
+        {
+            return Has_Elevator;
+        }
         public override bool Equals(object? obj)
         {
         if(obj == null) { return false; }
@@ -52,6 +60,18 @@ namespace DotNetAdvanced_Examen
             }
             return station;
         }
+        public static Station findStationById(int id)
+        {
+            Station station = null;
+            foreach (var item in Station.LijstStation)
+            {
+                if (item.GetStationId() == id)
+                {
+                    station = item;
+                }
+            }
+            return station;
+        }
     }
-
 }
+
