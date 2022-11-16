@@ -22,6 +22,13 @@ namespace DotNetAdvanced_Examen
             StationId = stationId;
             Is_Working = is_Working;
         }
+        public Lift(string name, int stationId, byte is_Working)
+        {
+            this.Id = LijstSLiften.Count + 1;
+            this.Name = name;
+            this.StationId = stationId;
+            this.Is_Working = is_Working;
+        }    
         public byte GetIsWorking()
         {
             return Is_Working;
@@ -94,6 +101,19 @@ namespace DotNetAdvanced_Examen
                 command.Parameters.AddWithValue("@Id", this.GetId());
                 command.ExecuteNonQuery();
             }
+        }
+        public void addLiftToDB()
+        {
+            string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\tijl-\\OneDrive\\Documenten\\Stations.mdf;Integrated Security=True;Connect Timeout=30";
+            SqlConnection connection = new SqlConnection(dbConnection);
+            SqlCommand command = new SqlCommand("INSERT INTO Liften (Id,Naam,Station_id,Is_Working) VALUES(@Id,@Naam,@StationId,@Is_Working)", connection);
+            connection.Open();
+            command.Parameters.AddWithValue("@Id", this.Id);
+            command.Parameters.AddWithValue("@Naam", this.Name);
+            command.Parameters.AddWithValue("@StationId", this.StationId);
+            command.Parameters.AddWithValue("@Is_Working", this.Is_Working);
+            command.ExecuteNonQuery();
+            connection.Close();
         }
     }
 }

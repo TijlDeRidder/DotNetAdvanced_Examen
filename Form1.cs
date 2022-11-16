@@ -16,7 +16,7 @@ namespace DotNetAdvanced_Examen
         private void LiftMeUp_Load(object sender, EventArgs e)
         {
             getData();
-            Station.LijstStation.ForEach(station => cb_metrostation.Items.Add(station.ToString()));
+            update_lists();
             fill_tab_meldingen(Melding.MeldingCount);
         }
 
@@ -39,6 +39,7 @@ namespace DotNetAdvanced_Examen
                 lb_liftnaam.Visible = false;
                 tb_liftnaam.Visible = false;
                 tb_status.Visible = false;
+                b_defect.Visible = false;
             }
             else if(huidig.GetIsAccecible() == 1 && huidig.GetHasElevator() == 0)
             {
@@ -49,6 +50,7 @@ namespace DotNetAdvanced_Examen
                 lb_liftnaam.Visible = false;
                 tb_liftnaam.Visible = false;
                 tb_status.Visible = false;
+                b_defect.Visible = false;
             }
 
         }
@@ -173,6 +175,63 @@ namespace DotNetAdvanced_Examen
             Melding.MeldingCount = 0;
             fill_tab_meldingen(Melding.MeldingCount);
 
+        }
+
+        private void b_station_toevoegen_Click(object sender, EventArgs e)
+        {
+            byte hasElevator;
+            byte isAccesible;
+            if (rb_isAccesible_ja.Checked)
+            {
+                isAccesible = 1;
+            }
+            else
+            {
+                isAccesible = 0;
+            }
+            if (rb_hasElevator_ja.Checked)
+            {
+                hasElevator = 1;
+            }
+            else
+            {
+                hasElevator = 0;
+            }
+            Station nieuwStation = new Station(tb_station_toevoegen_naam.Text, isAccesible,hasElevator);
+            Station.LijstStation.Add(nieuwStation);
+            nieuwStation.addStationToDB();
+            update_lists();
+            tb_station_toevoegen_naam.Clear();
+            rb_isAccesible_ja.Checked = false;
+            rb_isAccesible_nee.Checked = false;
+            rb_hasElevator_ja.Checked = false;
+            rb_hasElevator_nee.Checked = false;
+        }
+
+        private void b_lift_toevoegen_Click(object sender, EventArgs e)
+        {
+            byte isWorking;
+            if (rb_isWorking_ja.Checked)
+            {
+                isWorking = 1;
+            }
+            else
+            {
+                isWorking = 0;
+            }
+            int stationId = Station.findStationByName(cb_metrostation_toevoegen.Text).GetStationId();
+            Lift nieuweLift = new Lift(tb_lift_toevoegen_naam.Text, stationId, isWorking);
+            Lift.LijstSLiften.Add(nieuweLift);
+            nieuweLift.addLiftToDB();
+            tb_lift_toevoegen_naam.Clear();
+            rb_isWorking_ja.Checked = false;
+            rb_isWorking_nee.Checked = false;
+        }
+
+        private void update_lists()
+        {
+            Station.LijstStation.ForEach(station => cb_metrostation.Items.Add(station.ToString()));
+            Station.LijstStation.ForEach(station => cb_metrostation_toevoegen.Items.Add(station.ToString()));
         }
     }
 }

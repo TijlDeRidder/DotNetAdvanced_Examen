@@ -24,6 +24,14 @@ namespace DotNetAdvanced_Examen
             Has_Elevator = has_Elevator;
         }
 
+        public Station(string name, byte is_Accecible, byte has_Elevator)
+        {
+            this.Id = Station.LijstStation.Count + 1;
+            this.Name = name;
+            this.Is_Accecible = is_Accecible;
+            this.Has_Elevator = has_Elevator;
+        }
+
         public override string? ToString()
         {
             return this.Name;
@@ -71,6 +79,19 @@ namespace DotNetAdvanced_Examen
                 }
             }
             return station;
+        }
+        public void addStationToDB()
+        {
+            string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\tijl-\\OneDrive\\Documenten\\Stations.mdf;Integrated Security=True;Connect Timeout=30";
+            SqlConnection connection = new SqlConnection(dbConnection);
+            SqlCommand command = new SqlCommand("INSERT INTO STATIONS (Id,Naam,Is_Accecible,Has_Elevator) VALUES(@Id,@Naam,@Is_Accecible,@Has_Elevator)", connection);
+            connection.Open();
+            command.Parameters.AddWithValue("@Id", this.Id);
+            command.Parameters.AddWithValue("@Naam", this.Name);
+            command.Parameters.AddWithValue("Is_Accecible", this.Is_Accecible);
+            command.Parameters.AddWithValue("@Has_Elevator", this.Has_Elevator);
+            command.ExecuteNonQuery();
+            connection.Close();
         }
     }
 }
