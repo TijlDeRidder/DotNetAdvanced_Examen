@@ -22,6 +22,11 @@ namespace DotNetAdvanced_Examen
 
         private void cb_metrostation_SelectedIndexChanged(object sender, EventArgs e)
         {
+            lb_status.Visible = false;
+            lb_liftnaam.Visible = false;
+            tb_liftnaam.Visible = false;
+            tb_status.Visible = false;
+            b_defect.Visible = false;
             lb_liften.Items.Clear();
             string name = cb_metrostation.Text;
             Station huidig = Station.findStationByName(name);
@@ -167,13 +172,23 @@ namespace DotNetAdvanced_Examen
 
         private void b_fixed_Click(object sender, EventArgs e)
         {
-            Melding huidig  = Melding.Meldingen[Melding.MeldingCount];
-            huidig.lift.SetIsWorking(1);
-            huidig.lift.updateLiftDB();
-            huidig.updateMeldingDB();
-            Melding.Meldingen.Remove(huidig);
-            Melding.MeldingCount = 0;
-            fill_tab_meldingen(Melding.MeldingCount);
+        if(Melding.Meldingen.Count != 0)
+            {
+                Melding huidig = Melding.Meldingen[Melding.MeldingCount];
+                huidig.lift.SetIsWorking(1);
+                huidig.lift.updateLiftDB();
+                huidig.updateMeldingDB();
+                Melding.Meldingen.Remove(huidig);
+                Melding.MeldingCount = 0;
+                fill_tab_meldingen(Melding.MeldingCount);
+            }
+            else
+            {
+                tb_showDatum.Clear();
+                tb_showStation.Clear();
+                tb_showLift.Clear();
+                rtb_showUitleg.Clear();
+            }
 
         }
 
@@ -228,6 +243,7 @@ namespace DotNetAdvanced_Examen
             rb_isWorking_nee.Checked = false;
         }
 
+        //Lambda expressie
         private void update_lists()
         {
             Station.LijstStation.ForEach(station => cb_metrostation.Items.Add(station.ToString()));
