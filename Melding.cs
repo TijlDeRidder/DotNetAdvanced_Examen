@@ -50,7 +50,11 @@ namespace DotNetAdvanced_Examen
 
         public void addMeldingToDB()
         {
-            string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\tijl-\\OneDrive\\Documenten\\Stations.mdf;Integrated Security=True;Connect Timeout=30";
+            string info = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\", "Stations.mdf"));
+            string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
+                                        $"AttachDbFilename={info};" +
+                                        "Integrated Security=True;" +
+                                        "Connect Timeout=30";
             SqlConnection connection = new SqlConnection(dbConnection);
             SqlCommand command = new SqlCommand("INSERT INTO MELDINGEN(Id,LiftId,Station_Id,Date,Uitleg) VALUES(@Id,@LiftId,@StationId,@Date,@Uitleg)", connection);
             connection.Open();
@@ -64,7 +68,11 @@ namespace DotNetAdvanced_Examen
         }
         public void updateMeldingDB()
         {
-            string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\tijl-\\OneDrive\\Documenten\\Stations.mdf;Integrated Security=True;Connect Timeout=30";
+            string info = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\", "Stations.mdf"));
+            string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
+                                        $"AttachDbFilename={info};" +
+                                        "Integrated Security=True;" +
+                                        "Connect Timeout=30";
             SqlConnection connection = new SqlConnection(dbConnection);
             SqlCommand command = new SqlCommand("DELETE FROM MELDINGEN WHERE ID=(@Id)", connection);
             connection.Open();

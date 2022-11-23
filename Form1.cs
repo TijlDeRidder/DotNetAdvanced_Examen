@@ -8,6 +8,7 @@ namespace DotNetAdvanced_Examen
 {
     public partial class LiftMeUp : Form
     {
+
         public LiftMeUp()
         {
             InitializeComponent();
@@ -106,7 +107,11 @@ namespace DotNetAdvanced_Examen
 
         private void getData()
         {
-            string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\tijl-\\OneDrive\\Documenten\\Stations.mdf;Integrated Security=True;Connect Timeout=30";
+         string info = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\", "Stations.mdf"));
+         string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
+                                        $"AttachDbFilename={info};" +
+                                        "Integrated Security=True;" +
+                                        "Connect Timeout=30";
             SqlConnection connection = new SqlConnection(dbConnection);
             SqlCommand command = new SqlCommand("SELECT Id, Naam, Is_Accecible, Has_Elevator FROM Stations", connection);
             connection.Open();

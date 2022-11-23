@@ -91,7 +91,11 @@ namespace DotNetAdvanced_Examen
 
         public void updateLiftDB()
         {
-            string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\tijl-\\OneDrive\\Documenten\\Stations.mdf;Integrated Security=True;Connect Timeout=30";
+            string info = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\", "Stations.mdf"));
+            string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
+                                        $"AttachDbFilename={info};" +
+                                        "Integrated Security=True;" +
+                                        "Connect Timeout=30";
             SqlConnection connection = new SqlConnection(dbConnection);
             SqlCommand command = new SqlCommand("UPDATE LIFTEN SET Is_Working = (@working) WHERE Id = (@Id)", connection);
             connection.Open();
@@ -104,7 +108,11 @@ namespace DotNetAdvanced_Examen
         }
         public void addLiftToDB()
         {
-            string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\tijl-\\OneDrive\\Documenten\\Stations.mdf;Integrated Security=True;Connect Timeout=30";
+            string info = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\", "Stations.mdf"));
+            string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
+                                        $"AttachDbFilename={info};" +
+                                        "Integrated Security=True;" +
+                                        "Connect Timeout=30";
             SqlConnection connection = new SqlConnection(dbConnection);
             SqlCommand command = new SqlCommand("INSERT INTO Liften (Id,Naam,Station_id,Is_Working) VALUES(@Id,@Naam,@StationId,@Is_Working)", connection);
             connection.Open();
